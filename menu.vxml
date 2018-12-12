@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<vxml version="2.0" base="flash:/answer/menu.vxml">
+ <var name="number" expr="11111"/>
+
+ <menu id="main" dtmf="false">
+ <property name="timeout" value="4s"/>
+  <prompt><audio src="flash:/answer/hello.wav"/></prompt>
+
+  <catch event="noinput"><goto next="#secr"/>  </catch>
+   <choice dtmf="0" next="#secr"/>
+   <choice dtmf="1" next="#internal"/>
+   <choice dtmf="2" next="#secr"/>
+   <choice dtmf="3" next="#secr"/>
+   <choice dtmf="4" next="#webex"/>
+   <choice dtmf="5" next="#secr"/>
+   <choice dtmf="6" next="#secr"/>
+   <choice dtmf="7" next="#secr"/>
+   <choice dtmf="8" next="#secr"/>
+   <choice dtmf="9" next="#secr"/>
+ </menu>
+
+ <!-- Internal phones -->
+ <form id="internal">
+  <field name="num1" type="digits?lenght=4">
+   <grammar type="application/grammar+regex">[0-9][0-9][0-9][0-9]</grammar>
+   <filled>
+     <assign name="number" expr="'phone://1'+num1"/>
+     <goto next="#to_CM"/>
+   </filled>
+  </field>
+ </form>
+
+
+ <!-- Webex -->
+ <form id="webex">
+  <field name="num4" type="digits?lenght=3">
+   <grammar type="application/grammar+regex">[0-9][0-9][0-9]</grammar>
+    <filled>
+     <assign name="number" expr="'phone://4'+num4"/>
+     <goto next="#to_CM"/>
+    </filled>
+  </field>
+ </form>
+
+ <!-- Redirect to CM with number -->
+ <form id="to_CM">
+  <transfer connecttimeout="20s" name="mycall"  destexpr="number" bridge="true">
+
+   <catch event="error.connection.noroute error.connection.baddestination error.connection.noauthorization ">
+    <prompt><audio src="flash:/answer/wrong_number.wav"/></prompt>
+    <goto next="#secr"/>     
+   </catch>
+
+   <filled>
+    <if cond="mycall == 'busy'">
+     <prompt><audio src="flash:/answer/busy_number.wav"/></prompt>
+    <elseif cond="mycall == 'noanswer'"/>
+     <prompt><audio src="flash:/answer/empty.wav"/></prompt>
+    </if>
+   </filled>
+  </transfer>
+  <block> <disconnect/></block>
+ </form>      
+
+ <!-- Secretary -->
+ <form id="secr">
+  <transfer connecttimeout="20s" name="mycall"  dest="phone://11111" bridge="true"> 
+   <filled>
+    <if cond="mycall == 'busy'">
+     <prompt><audio src="flash:/answer/busy_number.wav"/></prompt>
+    <elseif cond="mycall == 'noanswer'"/>
+     <prompt><audio src="flash:/answer/empty.wav"/></prompt>
+    </if>
+   </filled>
+  </transfer>
+ <block> <disconnect/></block>
+ </form> 
+                                                                                      
+</vxml>
+

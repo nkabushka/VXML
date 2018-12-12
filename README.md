@@ -15,7 +15,9 @@ Cisco Call Manager controls internal phones. <br>
 Simplest answerphone. It plays hello-message and tranfer a call to the internal phone.
 
 <h2>menu.vxml</h2> <br>
-It plays hello-message, offers to dial an internal number or wait a secretary answer.
+It plays hello-message, offers to dial an internal number or wait a secretary answer. <br>
+Transfers internal numbers to Call Manager.
+
 
 
 

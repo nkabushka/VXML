@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<vxml version="2.0" base="flash:/answer/hello-transfer.vxml">
+
+ <form id="main">
+  <property name="timeout" value="3s"/>
+   <block>
+    <prompt><audio src="flash:/answer/hello.wav"/></prompt>
+    <goto next="#secr"/>
+   </block>
+ </form> 
+
+ <form id="secr"> 
+  <transfer connecttimeout="20s" name="mycall" dest="phone://11111" bridge="true"></transfer>
+ </form>                                                                               
+</vxml>
+
